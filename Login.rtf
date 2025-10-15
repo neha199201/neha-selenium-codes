@@ -1,0 +1,345 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2757
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fmodern\fcharset0 Courier-Oblique;}
+{\colortbl;\red255\green255\blue255;\red191\green100\blue38;\red32\green32\blue32;\red153\green168\blue186;
+\red173\green169\blue32;\red254\green187\blue91;\red109\green109\blue109;\red88\green118\blue71;\red86\green132\blue173;
+\red133\green96\blue154;}
+{\*\expandedcolortbl;;\csgenericrgb\c74902\c39216\c14902;\csgenericrgb\c12549\c12549\c12549;\csgenericrgb\c60000\c65882\c72941;
+\csgenericrgb\c67843\c66275\c12549;\csgenericrgb\c99608\c73333\c35686;\csgenericrgb\c42745\c42745\c42745;\csgenericrgb\c34510\c46275\c27843;\csgenericrgb\c33725\c51765\c67843;
+\csgenericrgb\c52157\c37647\c60392;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 package \cf4 com.izooto.panel.login\cf2 ;\
+\
+import \cf4 com.paulhammant.ngwebdriver.ByAngular\cf2 ;\
+import \cf4 org.openqa.selenium.By\cf2 ;\
+import \cf4 org.openqa.selenium.WebElement\cf2 ;\
+import \cf4 org.junit.jupiter.api.\cf5 Test\cf2 ;\
+import \cf4 org.openqa.selenium.WebDriver\cf2 ;\
+import \cf4 org.openqa.selenium.chrome.ChromeDriver\cf2 ;\
+\
+public class \cf4 TestLogin \{\
+\
+    \cf5 @Test\
+    \cf2 public void \cf6 login \cf4 () \cf2 throws \cf4 InterruptedException \{\
+\
+        \cf7 //Open Chrome Browser\
+        \cf4 WebDriver driver = \cf2 new \cf4 ChromeDriver()\cf2 ;\
+\
+        \cf7 //Open Panel\
+        \cf4 driver.get(\cf8 "https://panel.izooto.com/"\cf4 )\cf2 ;\
+        \cf4 driver.manage().window().maximize()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 1 - When both email and password is blank\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 1 passed. Email and password cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 2 - When both email and password is just spaces\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "      "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "      "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 2 passed. Email and password cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 3 - When email has a value and password is blank\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizmogra@gmail.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 3 passed. Password field cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 4 - When email is blank and password has value\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 4 passed. Email field cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 5 - When we enter valid email and invalid password value\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizmogra@gmail.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto"\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 5 passed. Password is invalid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 6 - When we enter invalid email and valid password value\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizmogra"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 6 passed. Email is invalid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 7 - When we enter email id that doesn't exist, not signed up yet\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "abcdtest@gmail.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 7 passed. Email id doesn't exist on panel."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 8 - Enter valid email id password and login\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizmogra@gmail.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 6000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 8 passed. Logged in on Panel successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 9 - Enter valid email id in capital letters and password and then login\
+        \cf4 WebElement dropdownButton = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-menu-trigger.menu-icon"\cf4 ))\cf2 ;\
+        \cf4 dropdownButton.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement myprofileOption = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Logout')]"\cf4 ))\cf2 ;\
+        \cf4 myprofileOption.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "DUMMYIZMOGRA@GMAIL.COM"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test Case 9 passed. Logged in on Panel successfully with email in Uppercase."\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 6000\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 10 - Login with Glogin\
+        \cf4 WebElement dropdownButton1 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-menu-trigger.menu-icon"\cf4 ))\cf2 ;\
+        \cf4 dropdownButton1.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement myprofileOption1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Logout')]"\cf4 ))\cf2 ;\
+        \cf4 myprofileOption1.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i className
+\f0\i0 (\cf8 "gmail-login-btn"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "identifierId"\cf4 )).sendKeys(\cf8 "neha@datability.co"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "identifierNext"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i name
+\f0\i0 (\cf8 "Passwd"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "passwordNext"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 10 passed. Logged in via Glogin successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Refresh Dashboard\
+        \cf4 driver.navigate().refresh()\cf2 ;\
+\
+    \cf4 \}\
+\}\
+\
+}

@@ -1,0 +1,134 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2757
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 package com.izooto.panel.SettingsSetup;\
+import java.util.ArrayList;\
+\
+import org.openqa.selenium.By;\
+import org.openqa.selenium.JavascriptExecutor;\
+import org.openqa.selenium.WebDriver;\
+import org.openqa.selenium.WebElement;\
+import org.openqa.selenium.chrome.ChromeDriver;\
+import org.openqa.selenium.interactions.Actions;\
+import org.testng.annotations.Test;\
+\
+import com.paulhammant.ngwebdriver.ByAngular;\
+\
+public class SettingsSetup \{\
+\
+	@Test\
+	public static void SetupPage() throws InterruptedException \{\
+		\
+		\
+		//Navigate Chrome Driver\
+	    WebDriver driver = new ChromeDriver();\
+		\
+	    //Open panel\
+	    driver.get("https://panel.izooto.com/");\
+	    driver.manage().window().maximize();\
+	    Thread.sleep(2000);\
+		\
+	    //Login on panel\
+		driver.findElement(By.xpath("//input[@formcontrolname='email']")).click();\
+		driver.findElement(By.xpath("//input[@formcontrolname='email']")).sendKeys("dummyizmesh@gmail.com");\
+		Thread.sleep(2000);\
+		driver.findElement(By.xpath("//input[@formcontrolname='password']")).click();\
+		driver.findElement(By.xpath("//input[@formcontrolname='password']")).sendKeys("Izooto@123");\
+		Thread.sleep(2000);\
+		driver.findElement(ByAngular.buttonText("Sign In")).click();\
+		Thread.sleep(8000);\
+		driver.navigate().refresh();\
+		Thread.sleep(3000);\
+		System.out.println("Panel logged In successfully.");\
+		 \
+		//Open Settings General Page : \
+		driver.findElement(By.linkText("arrow_rightsettingsSettings")).click();\
+		Thread.sleep(1000);\
+		driver.findElement(By.linkText("Setup")).click();\
+		Thread.sleep(2000);\
+	\
+//Disable Mobile and Desktop Optin\
+		\
+		//Desktop\
+		driver.findElement(By.className("mat-slide-toggle-thumb")).click();\
+		Thread.sleep(1000);\
+	    driver.findElement(ByAngular.buttonText("Yes")).click();\
+	    Thread.sleep(4000);\
+	    System.out.println("Desktop Optin disabled successfully.");\
+	    \
+	    //Mobile\
+	    driver.findElement(By.cssSelector("mat-row:nth-of-type(2) > mat-cell:nth-of-type(1)  .mat-checked.mat-primary.mat-slide-toggle.mat-slide-toggle--opt-in.mr-20 > .mat-slide-toggle-label")).click();\
+		Thread.sleep(1000);\
+	    driver.findElement(ByAngular.buttonText("Yes")).click();\
+	    System.out.println("Mobile Optin disabled successfully.");\
+		\
+//Enable Mobile and Desktop Optin\
+	    \
+	    //Desktop\
+	    Thread.sleep(4000);\
+	  	driver.findElement(By.className("mat-slide-toggle-thumb")).click();\
+	  	Thread.sleep(1000);\
+	  	driver.findElement(ByAngular.buttonText("Yes")).click();\
+	  	Thread.sleep(5000);\
+	  	System.out.println("Desktop Optin enabled successfully.");\
+	  	    \
+	  	//Mobile\
+	  	driver.findElement(By.cssSelector("mat-row:nth-of-type(2) > mat-cell:nth-of-type(1)  .mat-primary.mat-slide-toggle.mat-slide-toggle--opt-in.mr-20  .mat-slide-toggle-bar.mat-slide-toggle-bar-no-side-margin")).click();\
+	    Thread.sleep(1000);\
+	  	driver.findElement(ByAngular.buttonText("Yes")).click();\
+	  	System.out.println("Mobile Optin enabled successfully.");\
+		\
+//Native Optin\
+	  	\
+	  	Thread.sleep(4000);\
+	  	driver.findElement(ByAngular.buttonText("edit")).click();\
+	  	Thread.sleep(2000);\
+		driver.findElement(By.id("content-and-apperance-expansion-panel")).click();\
+		Thread.sleep(2000);\
+		driver.findElement(By.cssSelector("mat-slide-toggle[formcontrolname='nativeDesktopOverlay']")).click();\
+		Thread.sleep(3000);\
+		driver.findElement(By.cssSelector("[formcontrolname='nativeDesktopOverlayMessage']")).click();\
+		driver.findElement(By.cssSelector("[formcontrolname='nativeDesktopOverlayMessage']")).clear();\
+		driver.findElement(By.cssSelector("[formcontrolname='nativeDesktopOverlayMessage']")).sendKeys("Subscribe to my Test Website");\
+		Thread.sleep(2000);\
+		driver.findElement(ByAngular.buttonText("Publish")).click();\
+		\
+		//Open Website to check for the prompt on new tab\
+		Thread.sleep(5000);\
+		((JavascriptExecutor) driver).executeScript("window.open();");\
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());\
+        driver.switchTo().window(tabs.get(1));\
+        Thread.sleep(2000);\
+        driver.get("https://dummyizmesh.000webhostapp.com/");\
+        Thread.sleep(10000);\
+        driver.close();\
+    	  \
+//Dialog Box Prompt Type\
+        \
+        Thread.sleep(3000);\
+        WebElement mainPageElement = driver.findElement(ByAngular.buttonText("edit"));\
+	    Actions actions = new Actions(driver);\
+	    actions.moveToElement(mainPageElement).click().perform();\
+	  	driver.findElement(ByAngular.buttonText("edit")).click();\
+	  	Thread.sleep(2000);\
+	  	driver.findElement(By.xpath("//span[contains(text(), 'Dialog Box')]")).click();\
+        \
+        \
+        \
+	  	\
+	  	\
+        \
+       \
+    \}\
+\}     \
+	  \
+	 \
+	\
+	\
+	\
+\
+}

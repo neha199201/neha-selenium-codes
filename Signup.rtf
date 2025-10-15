@@ -1,0 +1,656 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2757
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fmodern\fcharset0 Courier-Oblique;}
+{\colortbl;\red255\green255\blue255;\red191\green100\blue38;\red32\green32\blue32;\red153\green168\blue186;
+\red173\green169\blue32;\red254\green187\blue91;\red109\green109\blue109;\red88\green118\blue71;\red86\green132\blue173;
+\red133\green96\blue154;}
+{\*\expandedcolortbl;;\csgenericrgb\c74902\c39216\c14902;\csgenericrgb\c12549\c12549\c12549;\csgenericrgb\c60000\c65882\c72941;
+\csgenericrgb\c67843\c66275\c12549;\csgenericrgb\c99608\c73333\c35686;\csgenericrgb\c42745\c42745\c42745;\csgenericrgb\c34510\c46275\c27843;\csgenericrgb\c33725\c51765\c67843;
+\csgenericrgb\c52157\c37647\c60392;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 package \cf4 com.izooto.panel.signup\cf2 ;\
+\
+\
+import \cf4 com.demo.utility.\cf5 JiraCreateIssue\cf2 ;\
+import \cf4 org.apache.commons.lang.RandomStringUtils\cf2 ;\
+import \cf4 org.junit.Assert\cf2 ;\
+import \cf4 org.openqa.selenium.By\cf2 ;\
+import \cf4 org.openqa.selenium.JavascriptExecutor\cf2 ;\
+import \cf4 org.openqa.selenium.WebDriver\cf2 ;\
+import \cf4 org.openqa.selenium.WebElement\cf2 ;\
+import \cf4 org.openqa.selenium.chrome.ChromeDriver\cf2 ;\
+import \cf4 org.openqa.selenium.interactions.Actions\cf2 ;\
+import \cf4 org.testng.annotations.\cf5 Test\cf2 ;\
+\
+public class \cf4 Signup \{\
+\
+    \cf5 @JiraCreateIssue\cf4 (isCreateIssue=\cf2 true\cf4 )\
+\
+    \cf5 @Test\
+    \cf2 public void \cf6 signUp\cf4 () \cf2 throws \cf4 InterruptedException \{\
+        \cf7 //Navigate Chrome Driver\
+        \cf4 WebDriver driver = \cf2 new \cf4 ChromeDriver()\cf2 ;\
+        \cf4 System.
+\f1\i setProperty
+\f0\i0 (\cf8 "webdriver.chrome.driver"\cf2 ,\
+                \cf8 "/Users/nehasingh/Documents/chromedriver-mac-x64/chromedriver"\cf4 )\cf2 ;\
+\
+        \cf7 // Open izooto signup page\
+        \cf4 driver.get(\cf8 "https://panel.izooto.com/en/signup"\cf4 )\cf2 ;\
+        \cf4 driver.manage().window().maximize()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 String actualTitle = driver.getTitle()\cf2 ;\
+        \cf4 String expectedTitle = \cf8 "panel"\cf2 ;\
+        \cf4 Assert.
+\f1\i assertEquals
+\f0\i0 (\cf8 "actualTitle"\cf2 , \cf8 "expectedTitle"\cf4 )\cf2 ;\
+\
+        \cf7 // Name Field Test Cases :\
+\
+        //Test case 1 - When name is blank and other fields are filled\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='username']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='username']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 WebElement emailInput = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 ))\cf2 ;\
+        \cf4 String randomEmail = \cf8 "user" \cf4 + RandomStringUtils.
+\f1\i randomAlphanumeric
+\f0\i0 (\cf9 5\cf4 ) + \cf8 "@example.com"\cf2 ;\
+        \cf4 emailInput.sendKeys(randomEmail)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement extensionDropdown = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-select[@formcontrolname='prefix']"\cf4 ))\cf2 ;\
+        \cf4 extensionDropdown.click()\cf2 ;\
+        \cf4 WebElement extensionOption = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-option/span[contains(text(), '+91')]"\cf4 ))\cf2 ;\
+        \cf4 extensionOption.click()\cf2 ;\
+        \cf4 WebElement phoneNumberInput = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 ))\cf2 ;\
+        \cf4 phoneNumberInput.sendKeys(\cf8 "7838398766"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement websiteInput = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 ))\cf2 ;\
+        \cf4 String randomURL = \cf8 "https://www." \cf4 + RandomStringUtils.
+\f1\i randomAlphabetic
+\f0\i0 (\cf9 10\cf4 ) + \cf8 ".com"\cf2 ;\
+        \cf4 websiteInput.sendKeys(randomURL)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement dropdown = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-select[@formcontrolname='monthlyTraffic']"\cf4 ))\cf2 ;\
+        \cf4 dropdown.click()\cf2 ;\
+        \cf4 WebElement option = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-option[@value='Less than 100K Unique Visitors']"\cf4 ))\cf2 ;\
+        \cf4 option.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".btn-action-main.mat-button-base.mat-primary.mat-raised-button.mt-10"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 1 passed. Name field cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 2 - When name is just spaces and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='username']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='username']"\cf4 )).sendKeys(\cf8 "           "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".btn-action-main.mat-button-base.mat-primary.mat-raised-button.mt-10"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 2 passed. Name field cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 // 2 - Email Field Test Cases :\
+\
+        //Test case 3 - When email is blank and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='username']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='username']"\cf4 )).sendKeys(\cf8 "Neha Singh"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 3 passed. Email field cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 4 - When email is blank and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "        "\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 4 passed. Email field cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 5 - When email is in wrong format\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizozo1"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 5 passed. Email Id is not correct."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 6 - When email is in wrong format\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizozo1.com"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 6 passed. Email Id is not correct."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 7 - When email is in wrong format\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizozo1-@#92802#izooto.com"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 7 passed. Email Id is not correct."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 8 - When email is already used\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "neha@datability.co"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 8 passed. Email Id is already used."\cf4 )\cf2 ;\
+\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).clear()\cf2 ;\
+        \cf4 WebElement emailInput1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 ))\cf2 ;\
+        \cf4 String randomEmail1 = \cf8 "user" \cf4 + RandomStringUtils.
+\f1\i randomAlphanumeric
+\f0\i0 (\cf9 5\cf4 ) + \cf8 "@example.com"\cf2 ;\
+        \cf4 emailInput1.sendKeys(randomEmail1)\cf2 ;\
+\
+        \cf7 // 3 - Password Field Test Cases :\
+\
+        //Test case 9 - When password is blank and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 9 passed. Password cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 10 - When password is just spaces and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "     "\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 10 passed. Password cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 11 - When password is short less than 6 characters\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "izoto"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 11 passed. Password is wrong."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 12 - When password is not matching password validations\
+\
+        // At least one character required of (A-Z), (a-z), (0-9) and a special character.\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "izooto@123"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 12 passed. Password is wrong."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 13 - When password is not matching password validations\
+\
+        // At least one character required of (A-Z), (a-z), (0-9) and a special character.\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto123"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 13 passed. Password is wrong."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 14 - when password is not matching password validations\
+\
+        // At least one character required of (A-Z), (a-z), (0-9) and a special character.\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 14 passed. Password is wrong."\cf4 )\cf2 ;\
+\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+\
+        \cf7 // 4 - Phone Number Field Test Cases :\
+\
+        //Test case 15 - When phone number is blank and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 15 passed. Phone number cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 16 - When phone number is just spaces and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).sendKeys(\cf8 "      "\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 16 passed. Phone number cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 17 - When phone number is not in right format\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).sendKeys(\cf8 "haslass"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 17 passed. Phone number is wrong."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 18 - When phone number is less than 7 characters\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).sendKeys(\cf8 "23233"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 18 passed. Phone number minimum 7 characters allowed."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 19 - When phone number is more than 16 characters\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).sendKeys(\cf8 "23293232392332238323833"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 19 passed. Phone number maximum 16 characters allowed."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 20 - When phone number is not in right format\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).sendKeys(\cf8 "232_33+73"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 20 passed. Phone number is invalid."\cf4 )\cf2 ;\
+\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 )).clear()\cf2 ;\
+        \cf4 WebElement extensionDropdown1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-select[@formcontrolname='prefix']"\cf4 ))\cf2 ;\
+        \cf4 extensionDropdown1.click()\cf2 ;\
+        \cf4 WebElement extensionOption1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-option/span[contains(text(), '+91')]"\cf4 ))\cf2 ;\
+        \cf4 extensionOption1.click()\cf2 ;\
+        \cf4 WebElement phoneNumberInput1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='number']"\cf4 ))\cf2 ;\
+        \cf4 phoneNumberInput1.sendKeys(\cf8 "7838-398-766"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+\
+        \cf7 // 5 - Website Field Test Cases :\
+\
+        //Test Case 21 - When website is blank and other fields are filled\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 21 passed. Website cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test Case 22 - When website is just spaces\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "         "\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 22 passed. Website cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 23 - When website doesn't have protocol\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "abc.com"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 23 passed. Website should start with https."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 24 - When website is http website\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "http://abc.com"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 24 passed. Website should start with https."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 25 - When website is invalid\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "https://abc"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 25 passed. Website is invalid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 26 - When website is invalid\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "https://dummy.c"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 26 passed. Website is invalid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 27 - When website is invalid\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "https://dummyiz/iz.c-com"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 27 passed. Website is invalid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 28 - When website is already used\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).sendKeys(\cf8 "https://dummyizmusical.com"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Test case 28 passed. Website domain is already taken."\cf4 )\cf2 ;\
+\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 )).clear()\cf2 ;\
+        \cf4 WebElement websiteInput1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//iz-input-website-url//input[@formcontrolname='url']"\cf4 ))\cf2 ;\
+        \cf4 String randomURL1 = \cf8 "https://www." \cf4 + RandomStringUtils.
+\f1\i randomAlphabetic
+\f0\i0 (\cf9 10\cf4 ) + \cf8 ".com"\cf2 ;\
+        \cf4 websiteInput1.sendKeys(randomURL1)\cf2 ;\
+\
+        \cf7 //Select Traffic\
+        \cf4 WebElement dropdown1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-select[@formcontrolname='monthlyTraffic']"\cf4 ))\cf2 ;\
+        \cf4 dropdown1.click()\cf2 ;\
+        \cf4 WebElement option1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-option[@value='Less than 100K Unique Visitors']"\cf4 ))\cf2 ;\
+        \cf4 option1.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+\
+        \cf7 //To signup on panel :\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".btn-action-main.mat-button-base.mat-primary.mat-raised-button.mt-10"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "All Test cases passed now successfully signed up on panel."\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 8000\cf4 )\cf2 ;\
+\
+        \cf7 //Accept Terms of Service\
+        \cf4 WebElement elementToScrollTo = driver.findElement(By.
+\f1\i className
+\f0\i0 (\cf8 "scrollar_content"\cf4 ))\cf2 ;\
+		\cf4 JavascriptExecutor js = (JavascriptExecutor) driver\cf2 ;\
+		\cf4 js.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i className
+\f0\i0 (\cf8 "accept-and-continue-button"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Accepted Terms of Service successfully."\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+\
+        \cf7 //To regain back focus again on page\
+        \cf4 WebElement mainPageElement = driver.findElement(By.
+\f1\i linkText
+\f0\i0 (\cf8 "Skip"\cf4 ))\cf2 ;\
+        \cf4 Actions actions = \cf2 new \cf4 Actions(driver)\cf2 ;\
+        \cf4 actions.moveToElement(mainPageElement).click().perform()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i linkText
+\f0\i0 (\cf8 "Skip"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf10 out
+\f0\i0 \cf4 .println(\cf8 "Dashboard opened successfully."\cf4 )\cf2 ;\
+\
+\
+\
+    \cf4 \}\
+\
+\}\
+\
+\
+\
+}

@@ -1,0 +1,1653 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2757
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fmodern\fcharset0 Courier-Oblique;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red191\green100\blue38;\red32\green32\blue32;\red153\green168\blue186;
+\red173\green169\blue32;\red254\green187\blue91;\red109\green109\blue109;\red88\green118\blue71;\red86\green132\blue173;
+\red163\green114\blue184;\red133\green96\blue154;}
+{\*\expandedcolortbl;;\csgenericrgb\c74902\c39216\c14902;\csgenericrgb\c12549\c12549\c12549;\csgenericrgb\c60000\c65882\c72941;
+\csgenericrgb\c67843\c66275\c12549;\csgenericrgb\c99608\c73333\c35686;\csgenericrgb\c42745\c42745\c42745;\csgenericrgb\c34510\c46275\c27843;\csgenericrgb\c33725\c51765\c67843;
+\csgenericrgb\c63922\c44706\c72157;\csgenericrgb\c52157\c37647\c60392;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 package \cf4 com.izooto.panel.send_push\cf2 ;\
+\
+import static \cf4 org.junit.Assert.
+\f1\i assertEquals
+\f0\i0 \cf2 ;\
+\
+import \cf4 java.text.SimpleDateFormat\cf2 ;\
+import \cf4 java.time.Duration\cf2 ;\
+import \cf4 java.util.Calendar\cf2 ;\
+import \cf4 java.util.Date\cf2 ;\
+import \cf4 java.util.Optional\cf2 ;\
+\
+import \cf4 org.junit.jupiter.api.\cf5 Order\cf2 ;\
+import \cf4 org.openqa.selenium.By\cf2 ;\
+import \cf4 org.openqa.selenium.JavascriptExecutor\cf2 ;\
+import \cf4 org.openqa.selenium.WebDriver\cf2 ;\
+import \cf4 org.openqa.selenium.WebElement\cf2 ;\
+import \cf4 org.openqa.selenium.chrome.ChromeDriver\cf2 ;\
+import \cf4 org.openqa.selenium.devtools.DevTools\cf2 ;\
+import \cf4 org.openqa.selenium.devtools.HasDevTools\cf2 ;\
+import \cf4 org.openqa.selenium.interactions.Actions\cf2 ;\
+import \cf4 com.paulhammant.ngwebdriver.ByAngular\cf2 ;\
+import \cf4 org.testng.annotations.\cf5 Test\cf2 ;\
+\
+public class \cf4 SendPush \{\
+    \cf5 @Test\
+    \cf2 public static void \cf6 sendNotification \cf4 () \cf2 throws \cf4 InterruptedException \{\
+\
+        \cf7 //Navigate Chrome Driver\
+        \cf4 WebDriver driver = \cf2 new \cf4 ChromeDriver()\cf2 ;\
+\
+        \cf7 //To capture middleware Reponse and API\
+        \cf4 DevTools devTools = ((HasDevTools) driver).getDevTools()\cf2 ;\
+        \cf4 devTools.createSession()\cf2 ;\
+        \cf4 devTools.send(org.openqa.selenium.devtools.v118.network.Network.
+\f1\i enable
+\f0\i0 (Optional.
+\f1\i empty
+\f0\i0 ()\cf2 , \cf4 Optional.
+\f1\i empty
+\f0\i0 ()\cf2 , \cf4 Optional.
+\f1\i empty
+\f0\i0 ()))\cf2 ;\
+        \cf4 devTools.addListener(org.openqa.selenium.devtools.v118.network.Network.
+\f1\i requestWillBeSent
+\f0\i0 ()\cf2 , \cf4 requestConsumer -> \{\
+            \cf5 @SuppressWarnings\cf4 (\cf8 "unused"\cf4 )\
+            org.openqa.selenium.devtools.v118.network.model.Request request = requestConsumer.getRequest()\cf2 ;\
+            \cf7 //  System.out.println(request.getUrl());\
+        \cf4 \})\cf2 ;\
+\
+        \cf5 @SuppressWarnings\cf4 (\cf8 "unused"\cf4 ) \cf2 final \cf4 org.openqa.selenium.devtools.v118.network.model.RequestId[] requestId = \cf2 new \cf4 org.openqa.selenium.devtools.v118.network.model.RequestId[\cf9 1\cf4 ]\cf2 ;\
+\
+        \cf4 devTools.addListener(org.openqa.selenium.devtools.v118.network.Network.
+\f1\i responseReceived
+\f0\i0 ()\cf2 , \cf4 responseConsumer -> \{\
+            org.openqa.selenium.devtools.v118.network.model.Response response = responseConsumer.getResponse()\cf2 ;\
+            \cf10 requestId\cf4 [\cf9 0\cf4 ] = responseConsumer.getRequestId()\cf2 ;\
+\
+            if \cf4 (response.getUrl().contains(\cf8 "middlewarev3.izooto.com"\cf4 )) \{\
+                System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(response.getStatus() + \cf8 " " \cf4 + response.getUrl())\cf2 ;\
+                \cf7 //Assuming response.getStatus() returns an Integer\
+                
+\f1\i \cf4 assertEquals
+\f0\i0 (response.getStatus().intValue()\cf2 , \cf9 200\cf4 )\cf2 ;\
+                \cf4 String responseBody = \cf10 devTools\cf4 .send(org.openqa.selenium.devtools.v118.network.Network.
+\f1\i getResponseBody
+\f0\i0 (\cf10 requestId\cf4 [\cf9 0\cf4 ])).getBody()\cf2 ;\
+                \cf4 System.
+\f1\i \cf11 err
+\f0\i0 \cf4 .println(responseBody)\cf2 ;\
+            \cf4 \}\
+        \})\cf2 ;\
+\
+        \cf7 //Open panel\
+        \cf4 driver.get(\cf8 "https://panel.izooto.com/"\cf4 )\cf2 ;\
+        \cf4 driver.manage().window().maximize()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+\
+        \cf7 //Login on panel\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='email']"\cf4 )).sendKeys(\cf8 "dummyizmogra@gmail.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='password']"\cf4 )).sendKeys(\cf8 "Izooto@123"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Sign In"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 12000\cf4 )\cf2 ;\
+        \cf4 driver.navigate().refresh()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Panel logged In successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Open Send Notification page :\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//app-root/iz-dashboard-root[@class='ng-star-inserted']/iz-layout-one[@class='show-email-banner']"\
+                \cf4 + \cf8 "/mat-drawer-container/mat-drawer-content/div[@class='iz-row']/div[@class='iz-col']/iz-left-nav"\
+                \cf4 + \cf8 "//span[.='Send Notification']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+\
+\cf7 //Markup Tags - Test cases for markup tags :\
+\
+        //Test case 1 : When Campaign name and Title is spaces -\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Configure"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).sendKeys(\cf8 "   "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-input-8"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-input-8"\cf4 )).sendKeys(\cf8 "      "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Save"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 1 passed. Campaign name and title cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 2 : When Campaign name and Title is blank -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-input-8"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-input-8"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Save"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 2 passed. Campaign name and title cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 3 : Enter values for all field and click Save -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//mat-dialog-container[@id='mat-dialog-0']/iz-campaign-confugration-tab[@class='ng-star-inserted']/div//form/div[1]/div[@class='col-field-value']/mat-form-field//input[@placeholder"\
+                \cf4 + \cf8 "='Type a default value or click @ to select from suggestions.']"\cf4 )).sendKeys(\cf8 "@meta:title"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-input-8"\cf4 )).sendKeys(\cf8 "@og:title"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Save"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 3 passed. All fields saved successfully."\cf4 )\cf2 ;\
+\
+\cf7 //Landing Page URL test cases :\
+\
+        //Test case 4 : Enter blank landing url value -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 ""\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 4 passed. Landing Url cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 5 : Enter blank landing url value just spaces -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "                 "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 5 passed. Landing Url cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 6 : Enter invalid landing url -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "abplive"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 6 passed. Landing Url is not valid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 7 : Enter invalid landing url -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "https://abplive"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 7 passed. Landing Url is not valid."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 8 : Enter landing url with no campaign name and title -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "https://123.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 5000\cf4 )\cf2 ;\
+        \cf7 //To regain back focus again on page after snackbar closes\
+        \cf4 WebElement mainPageElement = driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-input-1"\cf4 ))\cf2 ;\
+        \cf4 Actions actions = \cf2 new \cf4 Actions(driver)\cf2 ;\
+        \cf4 actions.moveToElement(mainPageElement).click().perform()\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 8 passed. Campaign name and title cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 9 : Enter landing url with no title -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "https://hello.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 9 passed. Title cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 10 : Enter landing url  -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "https://abplive.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 driver.manage().timeouts().implicitlyWait(Duration.
+\f1\i ofSeconds
+\f0\i0 (\cf9 10\cf4 ))\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 10 passed. Details fetched successfully."\cf4 )\cf2 ;\
+\
+\cf7 //Campaign Name test cases :\
+\
+        //Test case 11 : Enter Campaign name just spaces -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).sendKeys(\cf8 "        "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 11 passed. Campaign name cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 12 : Enter Campaign name with small characters -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).sendKeys(\cf8 "Hello My Test Campaign"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 12 passed. Campaign name with small characters should be accepted and shouldn't throw error."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 13 : Enter Campaign name with maximum characters allowed 150 -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).sendKeys(\cf8 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the "\
+                \cf4 + \cf8 "industry's standard dummy text ever since the 1500"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 13 passed. Campaign name with 150 characters should be accepted and shouldn't throw error."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 14 : Enter Campaign name in different language -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).sendKeys(\cf8 "
+\f2 \uc0\u26080 \u21487 \u21542 \u35748 \u65292 \u24403 \u35835 \u32773 \u22312 \u27983 \u35272 \u19968 \u20010 \u39029 \u38754 \u30340 \u25490 \u29256 \u26102 \u65292 
+\f0 "\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 14 passed. Campaign name in different language should be accepted and shouldn't throw error."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 15 : Enter Campaign name with alphanumeric and special charcters -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).sendKeys(\cf8 "Hello=123 ! My_test - notification* it is:;"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 15 passed. Campaign name with alphanumeric and special characters should be accepted and shouldn't throw error."\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignName']"\cf4 )).sendKeys(\cf8 "My Test Notificatiion it is"\cf4 )\cf2 ;\
+\
+\cf7 //Title test cases :\
+\
+        //Test case 16 : Enter Title just spaces -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).sendKeys(\cf8 "           "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 16 passed. Title cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 17 : Enter Title with small characters -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).sendKeys(\cf8 "Welcome my test notification"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 17 passed. Title with small characters should be accepted and shouldn't throw error."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 18 : Enter Title with large characters -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//textarea[@formcontrolname='campaignTitle']"\cf4 )).sendKeys(\cf8 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the "\
+                \cf4 + \cf8 "industry's standard dummy text ever since the 1500"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 18 passed. Title with large characters should be accepted and shouldn't throw error."\cf4 )\cf2 ;\
+\
+\cf7 //Icon Image test cases :\
+\
+        //Test case 23 : Enter icon image just spaces -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement resetButton = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']"\
+                \cf4 + \cf8 "/div/mat-card[3]/div[2]/div[1]//button[@type='button']"\cf4 ))\cf2 ;\
+        \cf4 resetButton.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']/div//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']/div/mat-card[3]"\
+                \cf4 + \cf8 "/div[2]/div[1]//mat-form-field//input[@type='text']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']/div//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']/div/mat-card[3]"\
+                \cf4 + \cf8 "/div[2]/div[1]//mat-form-field//input[@type='text']"\cf4 )).sendKeys(\cf8 "              "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 23 passed. Invalid Icon image"\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 24 : Enter invalid icon image -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']/div//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']/div/mat-card[3]"\
+                \cf4 + \cf8 "/div[2]/div[1]//mat-form-field//input[@type='text']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']/div//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']/div/mat-card[3]"\
+                \cf4 + \cf8 "/div[2]/div[1]//mat-form-field//input[@type='text']"\cf4 )).sendKeys(\cf8 "abc.png"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 24 passed. Invalid Icon image."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 25 : Enter valid icon image -\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']/div//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']/div/mat-card[3]"\
+                \cf4 + \cf8 "/div[2]/div[1]//mat-form-field//input[@type='text']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "/html//div[@id='display-area']/div//mat-vertical-stepper[@role='tablist']/div[1]/div/div[@role='tabpanel']/div/mat-card[3]"\
+                        \cf4 + \cf8 "/div[2]/div[1]//mat-form-field//input[@type='text']"\cf4 ))\
+                .sendKeys(\cf8 "https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_1280.jpg"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 25 passed. Valid Icon image."\cf4 )\cf2 ;\
+\
+\cf7 //CTA test cases :\
+\
+        //Test case 26 - Enable CTA\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i className
+\f0\i0 (\cf8 "mat-slide-toggle-label"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 26 passed. CTA enabled successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 27 - Leave CTA 1 values blank\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 27 passed. CTA 1 values cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 28 - Leave CTA 1 title blank\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).sendKeys(\cf8 "https://abplive.com"\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 28 passed. CTA 1 title cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 29 - Enter CTA 1 title just spaces\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1Title']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1Title']"\cf4 )).sendKeys(\cf8 "             "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 29 passed. CTA 1 title cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1Title']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1Title']"\cf4 )).sendKeys(\cf8 "Read More!!!!"\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 30 - Enter CTA 1 URL just spaces\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).sendKeys(\cf8 "            "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 30 passed. CTA 1 URL cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Testcase 31 - Keep CTA 1 URL blank\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).sendKeys(\cf8 "abplive"\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 31 passed. CTA 1 URL is invalid."\cf4 )\cf2 ;\
+\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta1LandingUrl']"\cf4 )).sendKeys(\cf8 "abplive.com"\cf4 )\cf2 ;\
+\
+        \cf7 //Testcase 32 - Enter invalid CTA 1 icon\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-checkbox-3"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='addIconCTA1Src']"\cf4 )).sendKeys(\cf8 "         "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 32 passed. CTA 1 icon is invalid"\cf4 )\cf2 ;\
+\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='addIconCTA1Src']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='addIconCTA1Src']"\cf4 )).sendKeys(\cf8 "https://cdn.pixabay.com/photo/2023/08/19/15/39/breakfast-8200753_1280.jpg"\cf4 )\cf2 ;\
+\
+        \cf7 //Enable CTA 2\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-icon[contains(text(),'add')]"\cf4 )).click()\cf2 ;\
+\
+        \cf7 //Test case 33 - Leave CTA 2 values blank\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 33 passed. CTA 2 values cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Testcase 34 - Leave CTA 2 title blank\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).sendKeys(\cf8 "https://abplive.com"\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 34 passed. CTA 2 title cannot be blank."\cf4 )\cf2 ;\
+\
+        \cf7 //Testcase 35 - Enter CTA 2 title just spaces\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2Title']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2Title']"\cf4 )).sendKeys(\cf8 "             "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 35 passed. CTA 2 title cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2Title']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2Title']"\cf4 )).sendKeys(\cf8 "Read the article later!!"\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 36 - Enter CTA 2 URL just spaces\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).sendKeys(\cf8 "            "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 36 passed. CTA 2 URL cannot be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 37 - Keep CTA 2 URL blank\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).sendKeys(\cf8 "abplive"\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 37 passed. CTA 2 URL is invalid."\cf4 )\cf2 ;\
+\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='cta2LandingUrl']"\cf4 )).sendKeys(\cf8 "https://abplive.com"\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 38 - Enter invalid CTA 2 icon\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i id
+\f0\i0 (\cf8 "mat-checkbox-5"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='addIconCTA2Src']"\cf4 )).sendKeys(\cf8 "          "\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 38 passed. CTA 2 icon is invalid"\cf4 )\cf2 ;\
+\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='addIconCTA2Src']"\cf4 )).clear()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='addIconCTA2Src']"\cf4 )).sendKeys(\cf8 "https://cdn.pixabay.com/photo/2016/12/02/02/10/idea-1876659_1280.jpg"\cf4 )\cf2 ;\
+\
+\cf7 //UTM Parameters Testcases\
+\
+        //Enable Advanced section\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 WebElement arrowIcon = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-icon[text()='keyboard_arrow_down']"\cf4 ))\cf2 ;\
+        \cf4 arrowIcon.click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Advanced section opened successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 42 - Enter just spaces for utm_campaign, utm_term, utm_content\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).sendKeys(\cf8 "               "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).sendKeys(\cf8 "               "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).sendKeys(\cf8 "               "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 42 passed. Utm Parameters can be just spaces."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 43 - Enter utm_campaign, utm_term, utm_content in different language\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).sendKeys(\cf8 "
+\f2 \uc0\u1601 \u1575 \u1574 \u1583 \u1578 \u1607 
+\f0 "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).sendKeys(\cf8 "
+\f2 \uc0\u2313 \u2342 \u2381 \u2351 \u2379 \u2327 
+\f0 "\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).sendKeys(\cf8 "
+\f2 \uc0\u1413 \u1379 \u1407 \u1377 \u1379 \u1400 \u1408 \u1390 \u1400 \u1410 \u1396 
+\f0 "\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 43 passed. Utm Parameters should not throw any error and should be accepted in different language."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 44 - Enter utm_campaign, utm_term, utm_content in Uppercase\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).sendKeys(\cf8 "CAMPAIGN"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).sendKeys(\cf8 "TERM"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).sendKeys(\cf8 "CONTENT"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 44 passed. Utm Parameters should not throw any error and should be accepted in uppercase."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 45 - Enter utm_campaign, utm_term, utm_content in alphanumeric\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaign']"\cf4 )).sendKeys(\cf8 "campaign_name*1"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='term']"\cf4 )).sendKeys(\cf8 "campaign_Term1"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).clear()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='content']"\cf4 )).sendKeys(\cf8 "campaign_content+"\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 45 passed. Utm Parameters should not throw any error and should be accepted in alphanumeric."\cf4 )\cf2 ;\
+\
+\cf7 //Push a campaign using Send Immediately\
+\
+        //Test case 46 - Push a campaign\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 WebElement button = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button.click()\cf2 ;\
+        \cf4 driver.manage().timeouts().implicitlyWait(Duration.
+\f1\i ofSeconds
+\f0\i0 (\cf9 10\cf4 ))\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 46 passed. Send Immediately notification pushed successfully."\cf4 )\cf2 ;\
+\
+\cf7 //Schedule Type Campaigns\
+\
+        //Test case 47 - Schedule a campaign : One-Time\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 10000\cf4 )\cf2 ;\
+        \cf7 //Open send notification again from campaign report create\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(),'Create')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "aajtak.in"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 WebElement elementToScrollTo = driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 ))\cf2 ;\
+        \cf4 JavascriptExecutor js1 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js1.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Schedule')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Schedule"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 WebElement button1 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button1.click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 47 passed. One-Time Campaign scheduled successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 48 - Schedule a campaign : Recurring type Daily\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 10000\cf4 )\cf2 ;\
+        \cf7 //Open send notification again from campaign report create\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(),'Create')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "news18.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 WebElement elementToScrollTo1 = driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 ))\cf2 ;\
+        \cf4 JavascriptExecutor js2 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js2.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo1)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Schedule')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Recurring"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-label[@class='mat-hint' and text()='Never Ends']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='endDate']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 Date currentDate = \cf2 new \cf4 Date()\cf2 ;\
+        \cf4 Calendar calendar = Calendar.
+\f1\i getInstance
+\f0\i0 ()\cf2 ;\
+        \cf4 calendar.setTime(currentDate)\cf2 ;\
+        \cf4 calendar.add(Calendar.
+\f1\i \cf11 DAY_OF_MONTH
+\f0\i0 \cf2 , \cf9 1\cf4 )\cf2 ;\
+        \cf4 Date nextDate = calendar.getTime()\cf2 ;\
+        \cf4 SimpleDateFormat dateFormat = \cf2 new \cf4 SimpleDateFormat(\cf8 "MMMM d, yyyy"\cf4 )\cf2 ;\
+        \cf4 String nextDateStr = dateFormat.format(nextDate)\cf2 ;\
+        \cf4 WebElement nextDateButton = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//button[contains(@aria-label, '" \cf4 + nextDateStr + \cf8 "')]"\cf4 ))\cf2 ;\
+        \cf4 nextDateButton.click()\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Schedule"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 WebElement button2 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button2.click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 48 passed. Daily recurring Campaign scheduled successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 49 - Schedule a campaign : Recurring type Weekly\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 10000\cf4 )\cf2 ;\
+        \cf7 //Open send notification again from campaign report create\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(),'Create')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "wtskora.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 WebElement elementToScrollTo2 = driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 ))\cf2 ;\
+        \cf4 JavascriptExecutor js3 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js3.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo2)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Schedule')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Recurring"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-label[@class='mat-hint' and text()='Never Ends']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='endDate']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 Date currentDate2 = \cf2 new \cf4 Date()\cf2 ;\
+        \cf4 Calendar calendar1 = Calendar.
+\f1\i getInstance
+\f0\i0 ()\cf2 ;\
+        \cf4 calendar1.setTime(currentDate2)\cf2 ;\
+        \cf4 calendar1.add(Calendar.
+\f1\i \cf11 DAY_OF_MONTH
+\f0\i0 \cf2 , \cf9 3\cf4 )\cf2 ;\
+        \cf4 Date nextDate1 = calendar1.getTime()\cf2 ;\
+        \cf4 SimpleDateFormat dateFormat1 = \cf2 new \cf4 SimpleDateFormat(\cf8 "MMMM d, yyyy"\cf4 )\cf2 ;\
+        \cf4 String nextDateStr1 = dateFormat1.format(nextDate1)\cf2 ;\
+        \cf4 WebElement nextDateButton1 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//button[contains(@aria-label, '" \cf4 + nextDateStr1 + \cf8 "')]"\cf4 ))\cf2 ;\
+        \cf4 nextDateButton1.click()\cf2 ;\
+        \cf7 //Scroll down on a page\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 JavascriptExecutor js4 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js4.executeScript(\cf8 "window.scrollTo(0, document.body.scrollHeight);"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 "[formControlName='repeatOptions']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 "mat-option[value='Weekly']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 "[formControlName='selectAllWeekDays']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Schedule"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 WebElement button4 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button4.click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 49 passed. Weekly recurring Campaign scheduled successfully."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 50 - Schedule a campaign : Recurring type Monthly\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 10000\cf4 )\cf2 ;\
+        \cf7 //Open send notification again from campaign report create\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(),'Create')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "dainikjagran.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 WebElement elementToScrollTo5 = driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 ))\cf2 ;\
+        \cf4 JavascriptExecutor js5 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js5.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo5)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Schedule')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Recurring"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-label[@class='mat-hint' and text()='Never Ends']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='endDate']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 Date currentDate21 = \cf2 new \cf4 Date()\cf2 ;\
+        \cf4 Calendar calendar11 = Calendar.
+\f1\i getInstance
+\f0\i0 ()\cf2 ;\
+        \cf4 calendar11.setTime(currentDate21)\cf2 ;\
+        \cf4 calendar11.add(Calendar.
+\f1\i \cf11 DAY_OF_MONTH
+\f0\i0 \cf2 , \cf9 3\cf4 )\cf2 ;\
+        \cf4 Date nextDate11 = calendar11.getTime()\cf2 ;\
+        \cf4 SimpleDateFormat dateFormat11 = \cf2 new \cf4 SimpleDateFormat(\cf8 "MMMM d, yyyy"\cf4 )\cf2 ;\
+        \cf4 String nextDateStr11 = dateFormat11.format(nextDate11)\cf2 ;\
+        \cf4 WebElement nextDateButton11 = driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//button[contains(@aria-label, '" \cf4 + nextDateStr11 + \cf8 "')]"\cf4 ))\cf2 ;\
+        \cf4 nextDateButton11.click()\cf2 ;\
+        \cf7 //Scroll down on a page\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 JavascriptExecutor js31 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js31.executeScript(\cf8 "window.scrollTo(0, document.body.scrollHeight);"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 "[formControlName='repeatOptions']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 "mat-option[value='Monthly']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 "[formControlName='selectAllMonthDates']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Schedule"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 WebElement button9 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button9.click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 50 passed. Monthly recurring Campaign scheduled successfully."\cf4 )\cf2 ;\
+\
+\cf7 //Segment - Push and Schedule a campaign on segment\
+\
+        //Test case 51 - Push a campaign to a segment\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 10000\cf4 )\cf2 ;\
+        \cf7 //Open send notification again from campaign report create\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(),'Create')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "abplive.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-radio-button[@value='send-to-segment']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//button[contains(., 'Select Segment')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[text()='Desktop Subscribers']/ancestor::mat-row//button[contains(@class, 'mat-stroked-button--select-segment')]"\cf4 )).click()\cf2 ;\
+        \cf4 WebElement elementToScrollTo6 = driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 ))\cf2 ;\
+        \cf4 JavascriptExecutor js6 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js6.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo6)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 3000\cf4 )\cf2 ;\
+        \cf4 WebElement button02 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button02.click()\cf2 ;\
+        \cf4 driver.manage().timeouts().implicitlyWait(Duration.
+\f1\i ofSeconds
+\f0\i0 (\cf9 10\cf4 ))\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 51 passed. Send Immediately notification pushed successfully to a segment."\cf4 )\cf2 ;\
+\
+        \cf7 //Test case 52 - Schedule a campaign to a segment\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 10000\cf4 )\cf2 ;\
+        \cf7 //Open send notification again from campaign report create\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(),'Create')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).click()\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//input[@formcontrolname='campaignLandingPageUrl']"\cf4 )).sendKeys(\cf8 "abplive.com"\cf4 )\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Create"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 4000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//mat-radio-button[@value='send-to-segment']"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//button[contains(., 'Select Segment')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[text()='Desktop Subscribers']/ancestor::mat-row//button[contains(@class, 'mat-stroked-button--select-segment')]"\cf4 )).click()\cf2 ;\
+        \cf4 WebElement elementToScrollTo8 = driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Send"\cf4 ))\cf2 ;\
+        \cf4 JavascriptExecutor js8 = (JavascriptExecutor) driver\cf2 ;\
+        \cf4 js8.executeScript(\cf8 "arguments[0].scrollIntoView(true);"\cf2 , \cf4 elementToScrollTo8)\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 2000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(By.
+\f1\i xpath
+\f0\i0 (\cf8 "//span[contains(text(), 'Schedule')]"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 driver.findElement(ByAngular.
+\f1\i buttonText
+\f0\i0 (\cf8 "Schedule"\cf4 )).click()\cf2 ;\
+        \cf4 Thread.
+\f1\i sleep
+\f0\i0 (\cf9 1000\cf4 )\cf2 ;\
+        \cf4 WebElement button7 = driver.findElement(By.
+\f1\i cssSelector
+\f0\i0 (\cf8 ".mat-button-base.mat-flat-button.mat-primary.mr-5  .iz-row.iz-row--align-center > span"\cf4 ))\cf2 ;\
+        \cf4 button7.click()\cf2 ;\
+        \cf4 System.
+\f1\i \cf11 out
+\f0\i0 \cf4 .println(\cf8 "Test case 52 passed. One-Time Campaign scheduled successfully to the segment."\cf4 )\cf2 ;\
+\
+\
+    \cf4 \}\
+\}\
+\
+}
